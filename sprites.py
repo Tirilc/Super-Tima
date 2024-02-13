@@ -7,8 +7,8 @@ class Player:
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (
-            WIDTH//2 - PLAYER_WIDTH//2,
-            HEIGHT//2 - PLAYER_HEIGHT//2
+            20,
+            HEIGHT - 40
         )
         
         self.pos = list(self.rect.center)
