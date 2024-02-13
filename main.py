@@ -3,6 +3,9 @@ import sys
 from settings import *
 from sprites import *
 
+#lager en plattform for bakken 
+platform_list=[Platform(0,HEIGHT-40, WIDTH, 40)]
+
 class Game:
     def __init__(self):
         # Initiere pygame
