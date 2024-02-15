@@ -18,7 +18,7 @@ class Player:
         #print(self.rect)
     
     def jump(self):
-        self.vel[1] = -20
+        self.vel[1] = -15
     
     def update(self):
         self.acc=[0,GRAVITY]
