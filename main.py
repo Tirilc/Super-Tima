@@ -27,15 +27,17 @@ class Game:
         self.player = Player()
         
         #lager platformer
-        while len(platform_list)<7:
+        i=0 
+        while len(platform_list)<4:
             #lager en ny platform
             new_platform=Platform(
-                random.randint(10,WIDTH-110),
-                random.randint(50, HEIGHT-210),
+                PLATFORM_X[i],
+                PLATFORM_Y[i],
                 100,
                 20
                 
             )
+            i+= 1
             
             safe=True
             
