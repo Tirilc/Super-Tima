@@ -44,6 +44,12 @@ class Player:
         #oppdaterer rektangelets posisjon
         self.rect.x = self.pos[0]
         self.rect.y= self.pos[1]
+
+        # Sjekker kollisjon med sidene
+        if self.pos[0] >= WIDTH - PLAYER_WIDTH:
+              self.pos[0] = WIDTH - PLAYER_WIDTH
+        if self.pos[0] <= 0:
+             self.pos[0] = 0
         
 class Platform:
     def __init__(self, x,y,w,h):
