@@ -129,3 +129,5 @@ game_object = Game()
 while game_object.running:
     # Starter et nytt spill
     game_object.new()
+
+pg.quit()
