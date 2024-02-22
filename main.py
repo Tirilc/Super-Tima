@@ -7,7 +7,7 @@ from sprites import *
 platform_list=[Platform(0,HEIGHT-40, WIDTH, 40)]
 
 #lager et slott
-castle = Castle(450,500,40,40)
+castle = Castle(400,100,40,40)
 
 class Game:
     def __init__(self):
@@ -91,17 +91,27 @@ class Game:
         
         #sjekker om vi faller
         if self.player.vel[1] >0:
-            collide=False
+            collide_platform = False
+            collide_castle = False
             
             #sjekker om spilleren kolliderer med en platform
             for p in platform_list:
                 if pg.Rect.colliderect(self.player.rect, p.rect):
-                    collide=True
+                    collide_platform = True
                     break
+                    
+            if pg.Rect.colliderect(self.player.rect, castle.rect):
+                collide_castle = True
+                #print("kolliderte med slott")
                 
-            if collide:
+            if collide_platform:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
+
+             if collide_castle:
+                #legge inn endringer av hva vi vil skal skje når vi treffer slottet, nå lander man på slottet
+                self.player.pos[1] = castle.rect.y - PLAYER_HEIGHT
+                self.player.vel[1] = 0
             
     
     # Metode som tegner ting på skjermen
