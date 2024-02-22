@@ -6,6 +6,9 @@ from sprites import *
 #lager en plattform for bakken 
 platform_list=[Platform(0,HEIGHT-40, WIDTH, 40)]
 
+#lager et slott
+castle = Castle(450,500,40,40)
+
 class Game:
     def __init__(self):
         # Initiere pygame
@@ -109,6 +112,9 @@ class Game:
         #tegner platofrmene
         for p in platform_list:
             self.screen.blit(p.image, (p.rect.x, p.rect.y))
+
+        #tegner slott
+        self.screen.blit(castle.image, (400, 100))
         
         # Tegner spilleren
         self.screen.blit(self.player.image, self.player.pos)
