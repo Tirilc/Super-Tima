@@ -7,7 +7,11 @@ from sprites import *
 platform_list=[Platform(0,HEIGHT-40, WIDTH, 40)]
 
 #lager et slott
-castle = Castle(400,100,40,40)
+castle = Castle(400,100,60,60)
+
+castle_img=pg.image.load('slott.png')
+
+castle_img=pg.transform.scale(castle_img, (60,60))
 
 class Game:
     def __init__(self):
@@ -108,7 +112,7 @@ class Game:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
 
-             if collide_castle:
+            if collide_castle:
                 #legge inn endringer av hva vi vil skal skje når vi treffer slottet, nå lander man på slottet
                 self.player.pos[1] = castle.rect.y - PLAYER_HEIGHT
                 self.player.vel[1] = 0
@@ -124,7 +128,7 @@ class Game:
             self.screen.blit(p.image, (p.rect.x, p.rect.y))
 
         #tegner slott
-        self.screen.blit(castle.image, (400, 100))
+        self.screen.blit(castle_img, (400, 100))
         
         # Tegner spilleren
         self.screen.blit(self.player.image, self.player.pos)
