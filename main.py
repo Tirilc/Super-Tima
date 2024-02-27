@@ -26,6 +26,9 @@ class Game:
         
         # Attributt som styrer om spillet skal kjøres
         self.running = True
+
+        #legger inn en font
+        self.font = pg.font.SysFont('Poppins-Regular', 32)
         
         
     # Metode for å starte et nytt spill
