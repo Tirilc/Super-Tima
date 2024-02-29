@@ -186,7 +186,7 @@ class Game:
         text_img = self.font.render(f"Få Tima til slottet. Bruk biltastene til å bevege deg fra høyre til venstre, og bruk space for å hoppe.",True, BLACK)
         text_rect=text_img.get_rect(x=10,y=300)
         
-        play_button = Button(10,50,100,50, WHITE, BLACK, 'Play', 32)
+        play_button = Button(180,350,100,50, WHITE, BLACK, 'Play', 32)
         
         while intro:
             for event in pg.event.get():
