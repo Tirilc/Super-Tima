@@ -43,6 +43,9 @@ class Game:
         #legger inn en font
         self.font = pg.font.SysFont('Poppins-Regular', 32)
         
+        #intro bakgrunn
+        self.intro_background =pg.image.load('intro_background.JPG')
+        
         
     # Metode for å starte et nytt spill
     def new(self):
@@ -175,7 +178,36 @@ class Game:
     
     # Metode som viser start-skjerm
     def show_start_screen(self):
-        pass
+        intro=True
+        
+        title=self.font.render('Super TIMA', True, BLACK)
+        title_rect=title.get_rect(x=10, y=10)
+        
+        text_img = self.font.render(f"Hei",True, BLACK)
+        text_rect=text_img.get_rect(x=150,y=150)
+        #self.screen.blit(text_img, (10,10))
+        
+        
+        play_button = Button(10,50,100,50, WHITE, BLACK, 'Play', 32)
+        
+        while intro:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    intro=False
+                    self.running=False
+                    
+            mouse_pos=pg.mouse.get_pos()
+            mouse_pressed=pg.mouse.get_pressed()
+            
+            if play_button.is_pressed(mouse_pos, mouse_pressed):
+                intro=False
+                
+            self.screen.blit(self.intro_background, (0,0))
+            self.screen.blit(title, title_rect)
+            self.screen.blit(text_img, text_rect)
+            self.screen.blit(play_button.image, play_button.rect)
+            self.clock.tick(FPS)
+            pg.display.update()
         
         
 collide_castle = False
@@ -185,6 +217,7 @@ game_object = Game()
 
 # Spill-løkken
 while game_object.running:
+    game_object.show_start_screen()
     # Starter et nytt spill
     game_object.new()
 
