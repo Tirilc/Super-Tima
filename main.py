@@ -154,13 +154,9 @@ class Game:
 
     #sjekker kollisjon med bunn
     if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
-        #print("game over")
         pg.quit()
-               
-                
-            
-                
-                
+        print("game over")
+                    
     
     # Metode som tegner ting på skjermen
     def draw(self):
