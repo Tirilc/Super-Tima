@@ -150,6 +150,12 @@ class Game:
             if collide_platform:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
+
+
+    #sjekker kollisjon med bunn
+    if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
+        #print("game over")
+        pg.quit()
                
                 
             
