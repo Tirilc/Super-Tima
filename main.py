@@ -155,6 +155,7 @@ class Game:
     #sjekker kollisjon med bunn
     if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
         pg.quit()
+        sys.exit()
         print("game over")
                     
     
