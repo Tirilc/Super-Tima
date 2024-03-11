@@ -182,6 +182,7 @@ class Game:
                 castle.rect.x = random.randint(20, 380)
                 castle.rect.y = 70
                 platform_list.append(Platform(castle.rect.x - 20 ,castle.rect.y + 60,100,20))
+                collide_castle = False
                 
                 #legge til nye platformer
                 while len(platform_list) < 7: #5 platformer å hoppe på til slottet
