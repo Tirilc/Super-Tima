@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+import random
 
 class Player:
     def __init__(self):
