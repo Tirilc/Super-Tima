@@ -159,6 +159,7 @@ class Game:
     def update(self):
         global collide_castle
         global collide_platform
+        global poeng
         self.player.update()
         
         #sjekker om vi faller
@@ -174,6 +175,7 @@ class Game:
             if pg.Rect.colliderect(self.player.rect, castle.rect) and not collide_castle:
                 collide_castle = True
                 #print("kolliderte med slott")
+                poeng+=1
                 self.player.pos[1] += HEIGHT - castle.rect.y - 100
                 
                 i = 0
