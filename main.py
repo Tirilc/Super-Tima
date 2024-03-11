@@ -267,7 +267,7 @@ class Game:
         intro=True
         
         title=self.font.render('Super TIMA', True, BLACK)
-        title_rect=title.get_rect(x=10, y=10)
+        title_rect=title.get_rect(x=180, y=100)
         
         text_img = self.font.render(f"Få Tima til slottet. Bruk biltastene til å bevege deg fra høyre til venstre, og bruk space for å hoppe.",True, BLACK)
         text_rect=text_img.get_rect(x=10,y=300)
