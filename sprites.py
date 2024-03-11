@@ -99,5 +99,16 @@ class Button:
             return False
         return False
 
+class Money:
+    def __init__(self, x,y,w,h):
+        self.image = pg.Surface((w,h))
+        self.image.fill(GREEN)
+        
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0,560)
+        self.rect.y = random.randint(40,660)
+        
+        
+
 
 #player = Player()
