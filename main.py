@@ -1,29 +1,35 @@
 import pygame as pg
 import sys
+import random
 from settings import *
 from sprites import *
 
-#lager en plattform for bakken 
-platform_list=[Platform(0,HEIGHT-40, WIDTH, 40)]
 
-#lager et slott
-castle = Castle(395,100,60,60)
+# lager en plattform for bakken
+platform_list = [Platform(0, HEIGHT-40, WIDTH, 40)]
 
-castle_img=pg.image.load('slott.png')
+# lager et slott
+castle = Castle(395, 100, 60, 60)
 
-castle_img=pg.transform.scale(castle_img, (60,60))
+castle_img = pg.image.load('slott.png')
 
-#legger inn tegning av spiller tima
+castle_img = pg.transform.scale(castle_img, (60, 60))
+
+# legger inn tegning av spiller tima
 player_img = pg.image.load('spiller.png')
 player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
-#indikerer level
+# indikerer level
 level = 1
 
 # Funksjon som viser level
+
+
 def display_level():
     text_img = self.font.render(f"Level: {level}", True, BLACK)
-    surface.blit(text_img, (20,20))
+    surface.blit(text_img, (20, 20))
+
+# display_level()
 
 
 class Game:
@@ -36,70 +42,64 @@ class Game:
 
         # Lager en klokke
         self.clock = pg.time.Clock()
-        
+
         # Attributt som styrer om spillet skal kjøres
         self.running = True
-        
-        #legger inn en font
+
+        # legger inn en font
         self.font = pg.font.SysFont('Poppins-Regular', 32)
-        
-        #intro bakgrunn
-        self.intro_background =pg.image.load('intro_background.JPG')
-        
-        
+
+        # intro bakgrunn
+        self.intro_background = pg.image.load('intro_background.JPG')
+
     # Metode for å starte et nytt spill
+
     def new(self):
         # Lager spiller-objekt
         self.player = Player()
-        
-        
-        #lager platformer
-        i=0 
-        while len(platform_list)<5:
-            #lager en ny platform
-            new_platform=Platform(
+
+        # lager platformer
+        i = 0
+        while len(platform_list) < 5:
+            # lager en ny platform
+            new_platform = Platform(
                 PLATFORM_X[i],
                 PLATFORM_Y[i],
                 100,
                 20
-                
+
             )
-            i+= 1
-            
-            safe=True
-            
-            #sjekker om den nye platformen kolliderer med de gamle
+            i += 1
+
+            safe = True
+
+            # sjekker om den nye platformen kolliderer med de gamle
             for p in platform_list:
                 if pg.Rect.colliderect(new_platform.rect, p.rect):
-                    safe=False
+                    safe = False
                     break
             if safe:
-                #legger i lista
+                # legger i lista
                 platform_list.append(new_platform)
             else:
                 print("platformen kolliderte, prøver på nytt")
-        
+
         self.run()
-        
-       
-        
-    
-        
-    
+
     # Metode som kjører spillet
+
     def run(self):
         # Game loop
         self.playing = True
-        
+
         while self.playing:
             self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
-        
-        
-        
+
     # Metode som håndterer hendelser
+
     def events(self):
         # Går gjennom hendelser (events)
         for event in pg.event.get():
@@ -107,16 +107,50 @@ class Game:
             if event.type == pg.QUIT:
                 if self.playing:
                     self.playing = False
-                self.running = False # Spillet skal avsluttes
-                
+                self.running = False  # Spillet skal avsluttes
+
             if event.type == pg.KEYDOWN:
                 # Spilleren skal hoppe hvis vi trykker på mellomromstasten
                 if event.key == pg.K_SPACE:
                     self.player.jump()
+               
+               
+               
+               # sjekker om vi faller
+                #if self.player.vel[1] > 0:
+                    #collide_platform = False
+
+                    # sjekker om spilleren kolliderer med en platform
+                    #for p in platform_list:
+                        #if pg.Rect.colliderect(self.player.rect, p.rect):
+                            #collide_platform = True
+                            #break
+                        
+                        
+               
+
+                #i = 0
+                
+                #while i<2:
+                    #if event.key == pg.K_SPACE:
+                        #self.player.jump()
+                        #i+=1
+                        
+                    
+                    
+                    #if collide_platform:
+                        #i = 0
+                
+                
+                # Spilleren skal hoppe hvis vi trykker på mellomromstasten
+                #if event.key == pg.K_SPACE:
+                    #self.player.jump()
+                
     
     # Metode som oppdaterer
     def update(self):
         global collide_castle
+        global collide_platform
         self.player.update()
         
         #sjekker om vi faller
@@ -139,25 +173,57 @@ class Game:
                     platform_list[i].rect.y += HEIGHT - castle.rect.y - 100
                     if platform_list[i].rect.top >= HEIGHT:
                         del platform_list[i]
+                        
                     else:
                         i += 1
-                   
-                castle.rect.x = 220
+                
+    
+                
+                castle.rect.x = random.randint(20, 380)
                 castle.rect.y = 70
+                platform_list.append(Platform(castle.rect.x - 20 ,castle.rect.y + 60,100,20))
                 
+                #legge til nye platformer
+                while len(platform_list) < 7: #5 platformer å hoppe på til slottet
+                    new = Platform(random.randint(0,WIDTH-100),random.randint(castle.rect.y +60, 470),100,20)
+                    
+                    safe=True
             
+                    #sjekker om den nye platformen kolliderer med de gamle
+                    for p in platform_list:
+                        if pg.Rect.colliderect(new.rect, p.rect):
+                            safe=False
+                            break
+                    if safe:
+                    #legger i lista
+                        platform_list.append(new)
+                    else:
+                        print("platformen kolliderte, prøver på nytt")
+                    
+                    
+                    
+                    
                 
+                    
+                    
+                    
+                    
+                                
             if collide_platform:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
-
-
-    #sjekker kollisjon med bunn
-    if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
-        pg.quit()
-        sys.exit()
-        print("game over")
-                    
+    
+        #sjekker kollisjon med bunn
+        if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
+            #print("game over")
+            pg.quit()
+            sys.exit()
+            print("game over")
+               
+                
+            
+                
+                
     
     # Metode som tegner ting på skjermen
     def draw(self):
@@ -184,10 +250,11 @@ class Game:
         intro=True
         
         title=self.font.render('Super TIMA', True, BLACK)
-        title_rect=title.get_rect(x=180, y=200)
+        title_rect=title.get_rect(x=10, y=10)
         
         text_img = self.font.render(f"Få Tima til slottet. Bruk biltastene til å bevege deg fra høyre til venstre, og bruk space for å hoppe.",True, BLACK)
         text_rect=text_img.get_rect(x=10,y=300)
+        
         
         play_button = Button(180,350,100,50, WHITE, BLACK, 'Play', 32)
         
@@ -212,6 +279,7 @@ class Game:
         
         
 collide_castle = False
+collide_platform = False
 
 # Lager et spill-objekt
 game_object = Game()
@@ -224,5 +292,6 @@ while game_object.running:
 
 pg.quit()
 sys.exit()
+
 
 
