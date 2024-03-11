@@ -19,17 +19,21 @@ castle_img = pg.transform.scale(castle_img, (60, 60))
 player_img = pg.image.load('spiller.png')
 player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
+#lager penger
+money=Money(250,150,150,100)
+
+money_img=pg.image.load('penger.png')
+
+money_img=pg.transform.scale(money_img, (60,60))
+
+#henter bilde til bakgrunn
+background_img= pg.image.load('bakgrunnsbilde.JPG')
+
+#tilpasser bakgrunnsbildet vår skjemstørrelse
+background_img=pg.transform.scale(background_img, SIZE)
+
 # indikerer level
 level = 1
-
-# Funksjon som viser level
-
-
-def display_level():
-    text_img = self.font.render(f"Level: {level}", True, BLACK)
-    surface.blit(text_img, (20, 20))
-
-# display_level()
 
 
 class Game:
@@ -52,8 +56,12 @@ class Game:
         # intro bakgrunn
         self.intro_background = pg.image.load('intro_background.JPG')
 
-    # Metode for å starte et nytt spill
+    # Funksjon som viser level
+    def display_poeng(self):
+        text_img = self.font.render(f"Poeng: {poeng}", True, BLACK)
+        self.screen.blit(text_img, (20,20))
 
+    # Metode for å starte et nytt spill
     def new(self):
         # Lager spiller-objekt
         self.player = Player()
@@ -228,8 +236,8 @@ class Game:
     
     # Metode som tegner ting på skjermen
     def draw(self):
-        # Fyller skjermen med en farge
-        self.screen.fill(WHITE)
+        #bruker bakgrundsbildet
+        self.screen.blit(background_img, (0,0))
         
         #tegner platofrmene
         for p in platform_list:
@@ -240,6 +248,12 @@ class Game:
         
         # Tegner spilleren
         self.screen.blit(player_img, self.player.pos)
+
+        #tegner penger
+        self.screen.blit(money_img, (money.rect.x, money.rect.y))
+        
+        #viser poeng
+        self.display_poeng()
         
         
         # "Flipper" displayet for å vise hva vi har tegnet
