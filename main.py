@@ -33,7 +33,7 @@ background_img= pg.image.load('bakgrunnsbilde.JPG')
 background_img=pg.transform.scale(background_img, SIZE)
 
 # indikerer level
-level = 1
+poeng = 0
 
 
 class Game:
