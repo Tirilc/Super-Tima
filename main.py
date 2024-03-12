@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import random
+from pygame import mixer
 from settings import *
 from sprites import *
 
@@ -32,6 +33,16 @@ background_img= pg.image.load('bakgrunnsbilde.JPG')
 
 #tilpasser bakgrunnsbildet vår skjemstørrelse
 background_img=pg.transform.scale(background_img, SIZE)
+
+
+#initialiserer mixer
+mixer.init()
+
+#legger inn lyd
+jump_sfx= pg.mixer.Sound('jump.mp3')
+intro_sfx=pg.mixer.Sound('intro.mp3')
+slott_sfx =pg.mixer.Sound('slott.mp3')
+money_sfx=pg.mixer.Sound('money.mp3')
 
 # indikerer level
 poeng = 0
@@ -128,40 +139,11 @@ class Game:
 
             if event.type == pg.KEYDOWN:
                 # Spilleren skal hoppe hvis vi trykker på mellomromstasten
-                if event.key == pg.K_SPACE:
+                if event.key == pg.K_SPACE and self.jump_count<=1:
                     self.player.jump()
-               
-               
-               
-               # sjekker om vi faller
-                #if self.player.vel[1] > 0:
-                    #collide_platform = False
+                    jump_sfx.play()
+                    self.jump_count+=1
 
-                    # sjekker om spilleren kolliderer med en platform
-                    #for p in platform_list:
-                        #if pg.Rect.colliderect(self.player.rect, p.rect):
-                            #collide_platform = True
-                            #break
-                        
-                        
-               
-
-                #i = 0
-                
-                #while i<2:
-                    #if event.key == pg.K_SPACE:
-                        #self.player.jump()
-                        #i+=1
-                        
-                    
-                    
-                    #if collide_platform:
-                        #i = 0
-                
-                
-                # Spilleren skal hoppe hvis vi trykker på mellomromstasten
-                #if event.key == pg.K_SPACE:
-                    #self.player.jump()
                 
     
     # Metode som oppdaterer
@@ -184,6 +166,7 @@ class Game:
             for p in platform_list:
                 if pg.Rect.colliderect(self.player.rect, p.rect):
                     collide_platform = True
+                    self.jump_count=0
                     break
 
              if collide_platform:
@@ -197,6 +180,7 @@ class Game:
             #sjekker om spiller kolliderer med slottet
             if pg.Rect.colliderect(self.player.rect, castle.rect) and not collide_castle:
                 collide_castle = True
+                slott_sfx.play()
                 #print("kolliderte med slott")
                 poeng+=1
                 self.player.pos[1] += HEIGHT - castle.rect.y - 100
@@ -278,6 +262,7 @@ class Game:
     # Metode som viser start-skjerm
     def show_start_screen(self):
         intro=True
+        intro_sfx.play()
         
         title=self.font.render('Super TIMA', True, BLACK)
         title_rect=title.get_rect(x=180, y=100)
