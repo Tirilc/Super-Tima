@@ -56,7 +56,7 @@ class Game:
     def __init__(self):
         # Initiere pygame
         pg.init()
-         background_sfx.play()
+        background_sfx.play()
 
         # Lager hovedvinduet
         self.screen = pg.display.set_mode(SIZE)
