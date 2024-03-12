@@ -161,6 +161,11 @@ class Game:
         global collide_platform
         global poeng
         self.player.update()
+
+        
+        for p in platform_list:
+            if pg.Rect.colliderect(p.rect, castle.rect):
+                p.image.fill(RED)
         
         #sjekker om vi faller
         if self.player.vel[1] >0:
@@ -171,15 +176,26 @@ class Game:
                 if pg.Rect.colliderect(self.player.rect, p.rect):
                     collide_platform = True
                     break
-            
+
+             if collide_platform:
+                self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
+                self.player.vel[1]=0
+
+        
+        #sjekker om vi står stille
+        if self.player.vel[1]<=0: 
+
+            #sjekker om spiller kolliderer med slottet
             if pg.Rect.colliderect(self.player.rect, castle.rect) and not collide_castle:
                 collide_castle = True
                 #print("kolliderte med slott")
                 poeng+=1
                 self.player.pos[1] += HEIGHT - castle.rect.y - 100
+
                 
                 i = 0
                 while i < len(platform_list):
+                    platform_list[0].image.fill(RED)
                     platform_list[i].rect.y += HEIGHT - castle.rect.y - 100
                     if platform_list[i].rect.top >= HEIGHT:
                         del platform_list[i]
@@ -191,7 +207,10 @@ class Game:
                 
                 castle.rect.x = random.randint(20, 380)
                 castle.rect.y = 70
-                platform_list.append(Platform(castle.rect.x - 20 ,castle.rect.y + 60,100,20))
+                
+                platform_castle = Platform(castle.rect.x - 20 ,castle.rect.y + 60,100,20)
+                platform_list.append(platform_castle)
+                platform_castle.image.fill(RED)
                 collide_castle = False
                 
                 #legge til nye platformer
@@ -211,19 +230,7 @@ class Game:
                     else:
                         print("platformen kolliderte, prøver på nytt")
                     
-                    
-                    
-                    
-                
-                    
-                    
-                    
-                    
-                                
-            if collide_platform:
-                self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
-                self.player.vel[1]=0
-    
+                      
         #sjekker kollisjon med bunn
         if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
             #print("game over")
@@ -232,16 +239,12 @@ class Game:
             print("game over")
                
                 
-            
-                
-                
-    
     # Metode som tegner ting på skjermen
     def draw(self):
         #bruker bakgrundsbildet
         self.screen.blit(background_img, (0,0))
         
-        #tegner platofrmene
+        #tegner platformene
         for p in platform_list:
             self.screen.blit(p.image, (p.rect.x, p.rect.y))
 
@@ -256,7 +259,6 @@ class Game:
         
         #viser poeng
         self.display_poeng()
-        
         
         # "Flipper" displayet for å vise hva vi har tegnet
         pg.display.flip()
