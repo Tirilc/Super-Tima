@@ -38,11 +38,15 @@ background_img=pg.transform.scale(background_img, SIZE)
 #initialiserer mixer
 mixer.init()
 
+
 #legger inn lyd
 jump_sfx= pg.mixer.Sound('jump.mp3')
-intro_sfx=pg.mixer.Sound('intro.mp3')
+jump_sfx.set_volume(0.5)
 slott_sfx =pg.mixer.Sound('slott.mp3')
+slott_sfx.set_volume(0.5)
 money_sfx=pg.mixer.Sound('money.mp3')
+money_sfx.set_volume(0.5)
+background_sfx=pg.mixer.Sound('background.mp3')
 
 # indikerer level
 poeng = 0
@@ -52,6 +56,7 @@ class Game:
     def __init__(self):
         # Initiere pygame
         pg.init()
+         background_sfx.play()
 
         # Lager hovedvinduet
         self.screen = pg.display.set_mode(SIZE)
