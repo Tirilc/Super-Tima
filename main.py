@@ -174,7 +174,7 @@ class Game:
                     self.jump_count=0
                     break
 
-             if collide_platform:
+            if collide_platform:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
 
