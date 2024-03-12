@@ -5,8 +5,9 @@ from settings import *
 from sprites import *
 
 
-# lager en plattform for bakken
+# lager lister
 platform_list = [Platform(0, HEIGHT-40, WIDTH, 40)]
+money_list =[Money(random.randint(0,460),random.randint(40,560),WIDTH,HEIGHT)]
 
 # lager et slott
 castle = Castle(395, 100, 60, 60)
@@ -91,6 +92,14 @@ class Game:
                 platform_list.append(new_platform)
             else:
                 print("platformen kolliderte, prøver på nytt")
+
+        #lager nye penger
+        while len(money_list) < 10:
+            # lager en ny penge
+            new_money = Money(random.randint(0,460),random.randint(40,560),WIDTH,HEIGHT)
+            i += 1
+            
+            money_list.append(new_money)
 
         self.run()
 
@@ -255,7 +264,9 @@ class Game:
         self.screen.blit(player_img, self.player.pos)
 
         #tegner penger
-        self.screen.blit(money_img, (money.rect.x, money.rect.y))
+        for money in money_list:
+            self.screen.blit(money_img, (money.rect.x, money.rect.y))
+        
         
         #viser poeng
         self.display_poeng()
