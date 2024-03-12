@@ -267,7 +267,6 @@ class Game:
     # Metode som viser start-skjerm
     def show_start_screen(self):
         intro=True
-        intro_sfx.play()
         
         title=self.font.render('Super TIMA', True, BLACK)
         title_rect=title.get_rect(x=180, y=100)
