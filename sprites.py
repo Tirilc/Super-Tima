@@ -52,7 +52,8 @@ class Player:
         if self.pos[0] <= 0:
              self.pos[0] = 0
         
-class Platform:
+
+class Object():
     def __init__(self, x,y,w,h):
         self.image=pg.Surface((w,h))
         self.image.fill(BLACK)
@@ -61,14 +62,23 @@ class Platform:
         self.rect.x=x
         self.rect.y=y
 
-class Castle:
-    def __init__(self, x,y,w,h):
-        self.image = pg.Surface((w,h))
-        self.image.fill(LIGHTBLUE)
         
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+class Platform(Object):
+    def __init__(self, x,y,w,h):
+        super().__init__(x,y,w,h)
+        
+
+class Castle(Object):
+    def __init__(self, x,y,w,h):
+        super().__init__(x,y,w,h)
+        
+        
+class Money(Object):
+    def __init__(self, x,y,w,h):
+        super().__init__(x,y,w,h)
+        self.rect.x = random.randint(0,460)
+        self.rect.y = random.randint(40,560)
+
 
 class Button:
     def __init__(self, x, y, width, height, fg, bg, content, fontsize):
@@ -100,14 +110,7 @@ class Button:
             return False
         return False
 
-class Money:
-    def __init__(self, x,y,w,h):
-        self.image = pg.Surface((w,h))
-        self.image.fill(GREEN)
-        
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0,560)
-        self.rect.y = random.randint(40,660)
+
         
         
 
