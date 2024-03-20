@@ -25,6 +25,14 @@ PLAYER_HEIGHT = 197//3
 PLAYER_ACC = 0.5
 PLAYER_FRICTION = -0.12
 
+#Innstillinger til platform
+PLATFORM_WIDTH = 100
+PLATFORM_HEIGHT = 20
+
+#Innstillinger til penger
+MONEY_WIDTH = 40
+MONEY_HEIGHT = 40
+
 #Plattform posisjon
 #level 1 
 PLATFORM_X = [80, 200,300, 370]
