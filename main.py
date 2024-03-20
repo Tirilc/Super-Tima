@@ -8,7 +8,7 @@ from sprites import *
 
 
 # lager plattform for bakken
-platform_list = [Platform(0, HEIGHT-40, WIDTH, 40)]
+platform_list = [Platform(0, HEIGHT-40, PLATFORM_WIDTH, 40)]
 
 #lager pengeliste
 money_list =[Money(random.randint(0,WIDTH-60),random.randint(40,HEIGHT-60),MONEY_WIDTH,MONEY_HEIGHT)]
@@ -182,7 +182,6 @@ class Game:
     def update(self):
         global collide_castle
         global collide_platform
-        global collide_money
         global poeng
         self.player.update()
 
@@ -210,7 +209,6 @@ class Game:
         #sjekker kollisjon med penger
         for m in money_list:
             if pg.Rect.colliderect(self.player.rect, m.rect):
-                collide_money = True
                 poeng +=1
                 money_list.remove(m)
                 break
@@ -385,7 +383,6 @@ class Game:
         
 collide_castle = False
 collide_platform = False
-collide_money = False 
 
 # Lager et spill-objekt
 game_object = Game()
