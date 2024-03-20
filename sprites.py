@@ -17,6 +17,9 @@ class Player:
         self.acc = [0, 0.8]
         
         #print(self.rect)
+
+        self.move_right=['bilder/hoyre1.png', 'bilder/hoyre2.png']
+        self.move_left=['bilder/venstre1.png', 'bilder/venstre2.png']
     
     def jump(self):
         self.vel[1] = -15
