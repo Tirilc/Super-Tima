@@ -211,12 +211,10 @@ class Game:
         for m in money_list:
             if pg.Rect.colliderect(self.player.rect, m.rect):
                 collide_money = True
+                poeng +=1
                 money_list.remove(m)
                 break
             
-            #denne vil ikke kjøre 
-        if collide_money : 
-            poeng +=1
 
         self.platform_castle = Platform(
                     castle.rect.x - 20 ,
