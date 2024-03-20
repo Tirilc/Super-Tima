@@ -26,8 +26,7 @@ castle_img = pg.transform.scale(castle_img, (60, 60))
 
 #legger inn bilde av platform
 platform_img = pg.image.load('bilder/sky.png')
-
-#platform_img=pg.transform.scale(platform_img, (100,20))
+platform_img=pg.transform.scale(platform_img, (100,20))
 
 #lager penger
 money=Money(250,150,MONEY_WIDTH,MONEY_HEIGHT)
@@ -208,14 +207,12 @@ class Game:
             #sjekker kollisjon med penger
             for m in money_list:
                 if pg.Rect.colliderect(self.player.rect, m.rect):
-                    print("penge kollidert med spiller")
                     collide_money = True
                     money_list.remove(m)
                     break
             
             #denne vil ikke kjøre 
             if collide_money : 
-                print("kjører collide money")
                 poeng +=1
 
         
@@ -274,8 +271,6 @@ class Game:
                     if safe:
                     #legger i lista
                         platform_list.append(new)
-                    else:
-                        print("platformen kolliderte, prøver på nytt")
 
                  #legge til nye penger
                 while len(money_list) < 5:
@@ -296,16 +291,12 @@ class Game:
                     if safe_money:
                         #legger til i lista
                         money_list.append(new_money)
-                    else:
-                        print("pengen kolliderte, prøver på nytt") 
                     
                       
         #sjekker kollisjon med bunn
         if self.player.pos[1] + PLAYER_HEIGHT >= HEIGHT:
-            #print("game over")
             pg.quit()
             sys.exit()
-            print("game over")
                
                 
     # Metode som tegner ting på skjermen
