@@ -123,7 +123,7 @@ class Game:
         while len(money_list) < 5:
             # lager nye penger
             new_money = Money(
-                random.randint(0,WIDHT - money.rect.x),
+                random.randint(0,WIDTH - money.rect.x),
                 random.randint(40,HEIGHT - money.rect.y - 40),
                 MONEY_WIDTH,
                 MONEY_HEIGHT
