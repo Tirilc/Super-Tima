@@ -6,15 +6,17 @@ from settings import *
 from sprites import *
 
 
-# lager lister
+# lager plattform for bakken
 platform_list = [Platform(0, HEIGHT-40, WIDTH, 40)]
-money_list =[Money(random.randint(0,460),random.randint(40,560),WIDTH,HEIGHT)]
+
+#lager pengeliste
+money_list =[Money(random.randint(0,WIDTH-60),random.randint(40,HEIGHT-60),MONEY_WIDTH,MONEY_HEIGHT)]
 
 # lager et slott
 castle = Castle(395, 100, 60, 60)
 
+#legger inn tegning av slottet
 castle_img = pg.image.load('slott.png')
-
 castle_img = pg.transform.scale(castle_img, (60, 60))
 
 # legger inn tegning av spiller tima
@@ -22,10 +24,10 @@ player_img = pg.image.load('spiller.png')
 player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
 
 #lager penger
-money=Money(250,150,150,100)
+money=Money(250,150,MONEY_WIDTH,MONEY_HEIGHT)
 
+#legger inn tegning av penger 
 money_img=pg.image.load('penger.png')
-
 money_img=pg.transform.scale(money_img, (60,60))
 
 #henter bilde til bakgrunn
@@ -73,7 +75,7 @@ class Game:
         # intro bakgrunn
         self.intro_background = pg.image.load('intro_background.JPG')
 
-    # Funksjon som viser level
+    # Funksjon som viser poeng
     def display_poeng(self):
         text_img = self.font.render(f"Poeng: {poeng}", True, BLACK)
         self.screen.blit(text_img, (20,20))
@@ -90,32 +92,47 @@ class Game:
             new_platform = Platform(
                 PLATFORM_X[i],
                 PLATFORM_Y[i],
-                100,
-                20
+                PLATFORM_WIDTH,
+                PLATFORM_HEIGHT
 
             )
             i += 1
 
-            safe = True
+            safe_platform = True
 
             # sjekker om den nye platformen kolliderer med de gamle
             for p in platform_list:
                 if pg.Rect.colliderect(new_platform.rect, p.rect):
-                    safe = False
+                    safe_platform = False
                     break
-            if safe:
+            if safe_platform:
                 # legger i lista
                 platform_list.append(new_platform)
             else:
                 print("platformen kolliderte, prøver på nytt")
 
         #lager nye penger
-        while len(money_list) < 10:
-            # lager en ny penge
-            new_money = Money(random.randint(0,460),random.randint(40,560),WIDTH,HEIGHT)
+        while len(money_list) < 5:
+            # lager nye penger
+            new_money = Money(
+                random.randint(0,WIDHT - money.rect.x),
+                random.randint(40,HEIGHT - money.rect.y - 40),
+                MONEY_WIDTH,
+                MONEY_HEIGHT
+            )
             i += 1
             
-            money_list.append(new_money)
+            safe_money = True
+            
+            for m in money_list:
+                if pg.Rect.colliderect(new_money.rect, p.rect) or pg.Rect.colliderect(new_money.rect, castle.rect):
+                    safe_money = False
+                    break
+            if safe_money:
+                #legger til i lista
+                money_list.append(new_money)
+            else:
+                print("pengen kolliderte, prøver på nytt")
 
         self.run()
 
@@ -155,6 +172,7 @@ class Game:
     def update(self):
         global collide_castle
         global collide_platform
+        global collide_money
         global poeng
         self.player.update()
 
@@ -166,6 +184,7 @@ class Game:
         #sjekker om vi faller
         if self.player.vel[1] >0:
             collide_platform = False
+            collide_money = False
             
             #sjekker om spilleren kolliderer med en platform
             for p in platform_list:
@@ -178,6 +197,19 @@ class Game:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
 
+            #sjekker kollisjon med penger
+            for m in money_list:
+                if pg.Rect.colliderect(self.player.rect, m.rect):
+                    print("penge kollidert med spiller")
+                    collide_money = True
+                    money_list.remove(m)
+                    break
+            
+            #denne vil ikke kjøre 
+            if collide_money : 
+                print("kjører collide money")
+                poeng +=1
+
         
         #sjekker om vi står stille
         if self.player.vel[1]<=0: 
@@ -186,9 +218,8 @@ class Game:
             if pg.Rect.colliderect(self.player.rect, castle.rect) and not collide_castle:
                 collide_castle = True
                 slott_sfx.play()
-                #print("kolliderte med slott")
-                poeng+=1
-                self.player.pos[1] += HEIGHT - castle.rect.y - 100
+                poeng+=5
+                self.player.pos[1] += HEIGHT - castle.rect.y - 70
 
                 
                 i = 0
@@ -206,14 +237,24 @@ class Game:
                 castle.rect.x = random.randint(20, 380)
                 castle.rect.y = 70
                 
-                platform_castle = Platform(castle.rect.x - 20 ,castle.rect.y + 60,100,20)
+                platform_castle = Platform(
+                    castle.rect.x - 20 ,
+                    castle.rect.y + 60,
+                    PLATFORM_WIDTH,
+                    PLATFORM_HEIGHT
+                )
                 platform_list.append(platform_castle)
                 platform_castle.image.fill(RED)
                 collide_castle = False
                 
                 #legge til nye platformer
                 while len(platform_list) < 7: #5 platformer å hoppe på til slottet
-                    new = Platform(random.randint(0,WIDTH-100),random.randint(castle.rect.y +60, 470),100,20)
+                    new = Platform(
+                        random.randint(0,WIDTH-PLATFORM_WIDTH),
+                        random.randint(castle.rect.y +60, 470),
+                        PLATFORM_WIDTH,
+                        PLATFORM_HEIGHT
+                    )
                     
                     safe=True
             
@@ -227,6 +268,28 @@ class Game:
                         platform_list.append(new)
                     else:
                         print("platformen kolliderte, prøver på nytt")
+
+                 #legge til nye penger
+                while len(money_list) < 5:
+                    new_money = Money(
+                        random.randint(0,WIDTH- money.rect.x),
+                        random.randint(40, HEIGHT-money.rect.y -40),
+                        MONEY_WIDTH,
+                        MONEY_HEIGHT
+                    )
+                    i +=1
+                    
+                    safe_money = True
+            
+                    for m in money_list:
+                        if pg.Rect.colliderect(new_money.rect, p.rect) or pg.Rect.colliderect(new_money.rect, castle.rect):
+                            safe_money = False
+                            break
+                    if safe_money:
+                        #legger til i lista
+                        money_list.append(new_money)
+                    else:
+                        print("pengen kolliderte, prøver på nytt") 
                     
                       
         #sjekker kollisjon med bunn
@@ -253,8 +316,9 @@ class Game:
         self.screen.blit(player_img, self.player.pos)
 
         #tegner penger
-        for money in money_list:
-            self.screen.blit(money_img, (money.rect.x, money.rect.y))
+        if len(money_list) > 0:
+            for money in money_list:
+                self.screen.blit(money_img, (money.rect.x, money.rect.y))
         
         
         #viser poeng
@@ -299,6 +363,7 @@ class Game:
         
 collide_castle = False
 collide_platform = False
+collide_money = False 
 
 # Lager et spill-objekt
 game_object = Game()
