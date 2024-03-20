@@ -28,6 +28,9 @@ castle_img = pg.transform.scale(castle_img, (60, 60))
 platform_img = pg.image.load('bilder/sky.png')
 platform_img=pg.transform.scale(platform_img, (100,20))
 
+castle_platform_img = pg.image.load('bilder/sky_pigger.png')
+castle_platform_img = pg.transform.scale(castle_platform_img, (100,30))
+
 #lager penger
 money=Money(250,150,MONEY_WIDTH,MONEY_HEIGHT)
 
@@ -204,18 +207,23 @@ class Game:
                 self.player.pos[1] = p.rect.y-PLAYER_HEIGHT
                 self.player.vel[1]=0
 
-            #sjekker kollisjon med penger
-            for m in money_list:
-                if pg.Rect.colliderect(self.player.rect, m.rect):
-                    collide_money = True
-                    money_list.remove(m)
-                    break
+        #sjekker kollisjon med penger
+        for m in money_list:
+            if pg.Rect.colliderect(self.player.rect, m.rect):
+                collide_money = True
+                money_list.remove(m)
+                break
             
             #denne vil ikke kjøre 
-            if collide_money : 
-                poeng +=1
+        if collide_money : 
+            poeng +=1
 
-        
+        self.platform_castle = Platform(
+                    castle.rect.x - 20 ,
+                    castle.rect.y + 60,
+                    PLATFORM_WIDTH,
+                    PLATFORM_HEIGHT
+                )
         #sjekker om vi står stille
         if self.player.vel[1]<=0: 
 
@@ -237,19 +245,19 @@ class Game:
                     else:
                         i += 1
                 
-    
+                
                 
                 castle.rect.x = random.randint(20, 380)
                 castle.rect.y = 70
                 
-                platform_castle = Platform(
+                self.platform_castle = Platform(
                     castle.rect.x - 20 ,
                     castle.rect.y + 60,
                     PLATFORM_WIDTH,
                     PLATFORM_HEIGHT
                 )
-                platform_list.append(platform_castle)
-                platform_castle.image.fill(RED)
+                platform_list.append(self.platform_castle)
+                #platform_castle.image.fill(RED)
                 collide_castle = False
                 
                 #legge til nye platformer
@@ -304,6 +312,7 @@ class Game:
         #bruker bakgrundsbildet
         self.screen.blit(background_img, (0,0))
         
+        self.screen.blit(castle_platform_img, (self.platform_castle.rect.x, self.platform_castle.rect.y))
         #tegner platformene
         for p in platform_list:
             self.screen.blit(platform_img, (p.rect.x, p.rect.y))
