@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import random
+import time
 from pygame import mixer
 from settings import *
 from sprites import *
@@ -16,22 +17,27 @@ money_list =[Money(random.randint(0,WIDTH-60),random.randint(40,HEIGHT-60),MONEY
 castle = Castle(395, 100, 60, 60)
 
 #legger inn tegning av slottet
-castle_img = pg.image.load('slott.png')
+castle_img = pg.image.load('bilder/slott.png')
 castle_img = pg.transform.scale(castle_img, (60, 60))
 
 # legger inn tegning av spiller tima
-player_img = pg.image.load('spiller.png')
-player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
+#player_img = pg.image.load('bilder/spiller.png')
+#player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
+
+#legger inn bilde av platform
+platform_img = pg.image.load('bilder/sky.png')
+
+#platform_img=pg.transform.scale(platform_img, (100,20))
 
 #lager penger
 money=Money(250,150,MONEY_WIDTH,MONEY_HEIGHT)
 
 #legger inn tegning av penger 
-money_img=pg.image.load('penger.png')
-money_img=pg.transform.scale(money_img, (60,60))
+money_img=pg.image.load('bilder/penger.png')
+money_img=pg.transform.scale(money_img, (20,20))
 
 #henter bilde til bakgrunn
-background_img= pg.image.load('bakgrunnsbilde.JPG')
+background_img= pg.image.load('bilder/bakgrunnsbilde.JPG')
 
 #tilpasser bakgrunnsbildet vår skjemstørrelse
 background_img=pg.transform.scale(background_img, SIZE)
@@ -42,13 +48,13 @@ mixer.init()
 
 
 #legger inn lyd
-jump_sfx= pg.mixer.Sound('jump.mp3')
+jump_sfx= pg.mixer.Sound('lyd/jump.mp3')
 jump_sfx.set_volume(0.5)
-slott_sfx =pg.mixer.Sound('slott.mp3')
+slott_sfx =pg.mixer.Sound('lyd/slott.mp3')
 slott_sfx.set_volume(0.5)
-money_sfx=pg.mixer.Sound('money.mp3')
+money_sfx=pg.mixer.Sound('lyd/money.mp3')
 money_sfx.set_volume(0.5)
-background_sfx=pg.mixer.Sound('background.mp3')
+background_sfx=pg.mixer.Sound('lyd/background.mp3')
 
 # indikerer level
 poeng = 0
@@ -73,7 +79,8 @@ class Game:
         self.font = pg.font.SysFont('Poppins-Regular', 32)
 
         # intro bakgrunn
-        self.intro_background = pg.image.load('intro_background.JPG')
+        self.intro_background = pg.image.load('bilder/intro_background.png')
+        self.intro_background = pg.transform.scale(self.intro_background, SIZE)
 
     # Funksjon som viser poeng
     def display_poeng(self):
@@ -84,6 +91,7 @@ class Game:
     def new(self):
         # Lager spiller-objekt
         self.player = Player()
+        self.t1 = time.time()
 
         # lager platformer
         i = 0
@@ -307,12 +315,37 @@ class Game:
         
         #tegner platformene
         for p in platform_list:
-            self.screen.blit(p.image, (p.rect.x, p.rect.y))
+            self.screen.blit(platform_img, (p.rect.x, p.rect.y))
 
         #tegner slott
         self.screen.blit(castle_img, (castle.rect.x, castle.rect.y))
         
-        # Tegner spilleren
+        #tegner spiller
+        player_img = pg.transform.scale(pg.image.load('bilder/hoyre1.png'), (PLAYER_SIZE))
+        if self.player.vel[1] < 0:
+            player_img = pg.transform.scale(pg.image.load('bilder/hoyre3.png'), (PLAYER_SIZE))
+            if self.player.vel[0] < 0:
+                player_img = pg.transform.scale(pg.image.load('bilder/venstre3.png'), (PLAYER_SIZE))
+        else:
+            t2=time.time()
+            dt = t2-self.t1 #forksjellen i tid
+            
+            keys=pg.key.get_pressed()
+            if keys[pg.K_RIGHT]:
+                player_img = pg.transform.scale(pg.image.load(self.player.move_right[0]), (PLAYER_SIZE))
+                if dt >= 0.25:
+                    player_img = pg.transform.scale(pg.image.load(self.player.move_right[0]), (PLAYER_SIZE))
+                    self.player.move_right.append(self.player.move_right[0])
+                    self.player.move_right.remove(self.player.move_right[0])
+                    self.t1 = time.time()
+            elif keys[pg.K_LEFT]:
+                player_img = pg.transform.scale(pg.image.load(self.player.move_left[0]), (PLAYER_SIZE))
+                if dt >= 0.25:
+                    player_img = pg.transform.scale(pg.image.load(self.player.move_left[0]), (PLAYER_SIZE))
+                    self.player.move_left.append(self.player.move_left[0])
+                    self.player.move_left.remove(self.player.move_left[0])
+                    self.t1 = time.time()
+        
         self.screen.blit(player_img, self.player.pos)
 
         #tegner penger
@@ -332,13 +365,6 @@ class Game:
     def show_start_screen(self):
         intro=True
         
-        title=self.font.render('Super TIMA', True, BLACK)
-        title_rect=title.get_rect(x=180, y=100)
-        
-        text_img = self.font.render(f"Få Tima til slottet. Bruk biltastene til å bevege deg fra høyre til venstre, og bruk space for å hoppe.",True, BLACK)
-        text_rect=text_img.get_rect(x=10,y=300)
-        
-        
         play_button = Button(180,350,100,50, WHITE, BLACK, 'Play', 32)
         
         while intro:
@@ -354,8 +380,6 @@ class Game:
                 intro=False
                 
             self.screen.blit(self.intro_background, (0,0))
-            self.screen.blit(title, title_rect)
-            self.screen.blit(text_img, text_rect)
             self.screen.blit(play_button.image, play_button.rect)
             self.clock.tick(FPS)
             pg.display.update()
@@ -371,8 +395,11 @@ game_object = Game()
 # Spill-løkken
 while game_object.running:
     game_object.show_start_screen()
+    
     # Starter et nytt spill
     game_object.new()
+
+print(f"Du fikk {poeng} poeng!")
 
 pg.quit()
 sys.exit()
