@@ -14,29 +14,14 @@ platform_list = [Platform(0, HEIGHT-40, PLATFORM_WIDTH, 40)]
 money_list =[Money(random.randint(0,WIDTH-60),random.randint(40,HEIGHT-60),MONEY_WIDTH,MONEY_HEIGHT)]
 
 # lager et slott
-castle = Castle(395, 100, 60, 60)
+castle = Castle(395, 100, CASTLE_WIDTH, CASTLE_HEIGHT)
 
-#legger inn tegning av slottet
-castle_img = pg.image.load('bilder/slott.png')
-castle_img = pg.transform.scale(castle_img, (60, 60))
-
-# legger inn tegning av spiller tima
-#player_img = pg.image.load('bilder/spiller.png')
-#player_img = pg.transform.scale(player_img, (PLAYER_WIDTH, PLAYER_HEIGHT))
-
-#legger inn bilde av platform
-platform_img = pg.image.load('bilder/sky.png')
-platform_img=pg.transform.scale(platform_img, (100,20))
 
 castle_platform_img = pg.image.load('bilder/sky_pigger.png')
 castle_platform_img = pg.transform.scale(castle_platform_img, (100,30))
 
 #lager penger
 money=Money(250,150,MONEY_WIDTH,MONEY_HEIGHT)
-
-#legger inn tegning av penger 
-money_img=pg.image.load('bilder/penger.png')
-money_img=pg.transform.scale(money_img, (20,20))
 
 #henter bilde til bakgrunn
 background_img= pg.image.load('bilder/bakgrunnsbilde.JPG')
@@ -50,8 +35,6 @@ mixer.init()
 
 
 #legger inn lyd
-jump_sfx= pg.mixer.Sound('lyd/jump.mp3')
-jump_sfx.set_volume(0.5)
 slott_sfx =pg.mixer.Sound('lyd/slott.mp3')
 slott_sfx.set_volume(0.5)
 money_sfx=pg.mixer.Sound('lyd/money.mp3')
@@ -173,7 +156,7 @@ class Game:
                 # Spilleren skal hoppe hvis vi trykker på mellomromstasten
                 if event.key == pg.K_SPACE and self.jump_count<=1:
                     self.player.jump()
-                    jump_sfx.play()
+                    self.player.jump_sfx.play()
                     self.jump_count+=1
 
                 
@@ -311,10 +294,10 @@ class Game:
         self.screen.blit(castle_platform_img, (self.platform_castle.rect.x, self.platform_castle.rect.y))
         #tegner platformene
         for p in platform_list:
-            self.screen.blit(platform_img, (p.rect.x, p.rect.y))
+            self.screen.blit(p.platform_img, (p.rect.x, p.rect.y))
 
         #tegner slott
-        self.screen.blit(castle_img, (castle.rect.x, castle.rect.y))
+        self.screen.blit(castle.castle_img, (castle.rect.x, castle.rect.y))
         
         #tegner spiller
         player_img = pg.transform.scale(pg.image.load('bilder/hoyre1.png'), (PLAYER_SIZE))
@@ -347,7 +330,7 @@ class Game:
         #tegner penger
         if len(money_list) > 0:
             for money in money_list:
-                self.screen.blit(money_img, (money.rect.x, money.rect.y))
+                self.screen.blit(money.money_img, (money.rect.x, money.rect.y))
         
         
         #viser poeng
