@@ -34,6 +34,10 @@ PLATFORM_HEIGHT = 20
 MONEY_WIDTH = 40
 MONEY_HEIGHT = 40
 
+#Innstillinger til slott
+CASTLE_WIDTH = 60
+CASTLE_HEIGHT = 60
+
 #Plattform posisjon
 #level 1 
 PLATFORM_X = [80, 200,300, 370]
