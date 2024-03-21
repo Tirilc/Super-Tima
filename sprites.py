@@ -15,14 +15,15 @@ class Player:
         self.pos = list(self.rect.center)
         self.vel = [0, 0]
         self.acc = [0, 0.8]
-        
-        #print(self.rect)
 
         self.move_right=['bilder/hoyre1.png', 'bilder/hoyre2.png']
         self.move_left=['bilder/venstre1.png', 'bilder/venstre2.png']
     
     def jump(self):
         self.vel[1] = -15
+        #legger inn lyd
+        self.jump_sfx= pg.mixer.Sound('lyd/jump.mp3')
+        self.jump_sfx.set_volume(0.5)
     
     def update(self):
         self.acc=[0,GRAVITY]
@@ -69,11 +70,17 @@ class Object():
 class Platform(Object):
     def __init__(self, x,y,w,h):
         super().__init__(x,y,w,h)
+        #legger inn bilde av platform
+        self.platform_img = pg.image.load('bilder/sky.png')
+        self.platform_img=pg.transform.scale(self.platform_img, (PLATFORM_WIDTH,PLATFORM_HEIGHT))
         
 
 class Castle(Object):
     def __init__(self, x,y,w,h):
         super().__init__(x,y,w,h)
+        #legger inn tegning av slottet
+        self.castle_img = pg.image.load('bilder/slott.png')
+        self.castle_img = pg.transform.scale(self.castle_img, (CASTLE_WIDTH, CASTLE_HEIGHT))
         
         
 class Money(Object):
@@ -81,6 +88,9 @@ class Money(Object):
         super().__init__(x,y,w,h)
         self.rect.x = random.randint(0,460)
         self.rect.y = random.randint(40,560)
+        #legger inn tegning av penger 
+        self.money_img=pg.image.load('bilder/penger.png')
+        self.money_img=pg.transform.scale(self.money_img, (MONEY_WIDTH,MONEY_HEIGHT))
 
 
 class Button:
