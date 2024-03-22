@@ -31,8 +31,8 @@ PLATFORM_WIDTH = 100
 PLATFORM_HEIGHT = 20
 
 #Innstillinger til penger
-MONEY_WIDTH = 40
-MONEY_HEIGHT = 40
+MONEY_WIDTH = 25
+MONEY_HEIGHT = 25
 
 #Innstillinger til slott
 CASTLE_WIDTH = 60
